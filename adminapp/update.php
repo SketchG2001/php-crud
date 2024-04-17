@@ -29,9 +29,10 @@ if ($result->num_rows > 0) {
         $mobile = $row["mobile"];
         $image = $row["file"];
     }
-} else {
-    echo "erro to redirect update";
 }
+//else {
+//     echo "erro to redirect update";
+// }
 // echo"$firstname"."<br>";
 // echo"$lastname"."<br>";
 // echo"$username"."<br>";
@@ -54,11 +55,32 @@ if ($result->num_rows > 0) {
         .formError {
             color: red;
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+        .popup button {
+            margin: 0 10px;
+        }
     </style>
+
 </head>
 
 <body>
-<?php
+    <?php
     if (isset($_GET['error'])) {
         $error_message = $_GET["error"];
         echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -68,8 +90,7 @@ if ($result->num_rows > 0) {
     }
     ?>
     <div class="mx-5">
-        <form enctype="multipart/form-data" name="userInfo" action="update_server.php" onsubmit="return validateForm()" method="post">
-
+        <form enctype="multipart/form-data" id="myForm" name="userInfo" action="update_server.php" method="post">
             <div class="mb-3" id="firstname">
                 <h3>Update User Info.</h3>
                 <label for="cpassword" class="form-label">First Name</label>
@@ -94,12 +115,12 @@ if ($result->num_rows > 0) {
             </div>
             <div class="mb-3" id="pass">
                 <label for="password" class="form-label">Password</label>
-                <input id="password"  type="password" name="password" placeholder="Password" class="form-control" />
+                <input id="password" type="password" name="password" placeholder="Password" class="form-control" />
                 <b><span class="formError" style="color: red;"></span></b>
             </div>
             <div class="mb-3" id="cpass">
                 <label for="cpassword" class="form-label">Confirm Password</label>
-                <input type="password"  name="cpassword" id="confirmPassword" placeholder="Confirm Password" class="form-control" />
+                <input type="password" name="cpassword" id="confirmPassword" placeholder="Confirm Password" class="form-control" />
                 <b><span class="formError" style="color: red;"></span></b>
             </div>
             <div class="mb-3">
@@ -174,10 +195,52 @@ if ($result->num_rows > 0) {
                 <input style="width: 250px" type="range" name="age" class="form-range" min="15" max="100" id="age" /><br>
                 <span id="ageError" style="display: inline;" class="formError"></span>
             </div>
-            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" name="submit" onclick="return validateFormAndConfirm()" value="userInfo" class="btn btn-primary">Submit</button>
+            <button type="submit" id="submitBtn" name="submit" value="userInfo" class="btn btn-primary" style="display: none;">Submit</button>
+
         </form>
     </div>
     </div>
+    <div class="popup" id="confirmationPopup">
+        <div class="popup-content">
+            <p>Are you sure you want to submit the form?</p>
+            <button onclick="submitForm()">Yes</button>
+            <button onclick="closePopup()">No</button>
+        </div>
+    </div>
+
+    <!-- Your HTML code -->
+
+    <script>
+        // Function to display the popup
+        function displayPopup() {
+            document.getElementById('confirmationPopup').style.display = 'block';
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('confirmationPopup').style.display = 'none';
+        }
+
+        // Function to validate form and confirm submission
+        function validateFormAndConfirm() {
+            if (validateForm()) { // Assuming you have a validateForm function
+                displayPopup();
+                return false; // Prevents the form from submitting automatically
+            }
+            return false; // Prevents the form from submitting automatically if validation fails
+        }
+
+        // Function to submit the form
+        function submitForm() {
+            // Programmatically trigger click event on the submit button
+            document.getElementById('submitBtn').click();
+        }
+    </script>
+
+
+    <!-- Your HTML code continues... -->
+
 
 </body>
 <script>
