@@ -125,7 +125,7 @@ if ($result->num_rows > 0) {
             </div>
             <div class="mb-3">
                 <input type="file" class="form-control" name="file" />
-                <?php echo '<img src="' . $image . '" alt="User Image" class="mt-1" style="width: 200px; height: 200px;">'; ?>
+                <?php echo '<img src="' .'../'. $image . '" alt="User Image" class="mt-1" style="width: 200px; height: 200px;">'; ?>
             </div>
             <div class="mb-3" id="date ">
                 <label for="datefield" class="form-label">Date</label>

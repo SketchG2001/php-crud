@@ -140,7 +140,7 @@
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="../index.html">Home</a>
           <a class="nav-link active" href="../login.php">User Login</a>
-          <a class="nav-link active" href="adminapp/admin.php">Admin Login</a>
+          <a class="nav-link active" href="admin.php">Admin Login</a>
           <a class="nav-link active" href="../newregister.php">Register Here</a>
         </div>
       </div>
