@@ -72,12 +72,19 @@ if (isset($_GET['message'])) {
     $result = $conn->query($sql);
 
     echo '<div id="deleteUserPopup" class="popup" style="display: none;">
-    <div class="popup-content">
-        <p>'.$username.' Are you sure want to delete your account.?</p>
-        <button id="deleteUserConfirm">Yes</button>
-        <button id="deleteUserCancel">No</button>
+    <div class="popup-content modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>'.$username.' Are you sure want to delete your account?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteUserConfirm" class="btn btn-primary">Yes</button>
+                <button id="deleteUserCancel" class="btn btn-secondary">No</button>
+            </div>
+        </div>
     </div>
 </div>';
+
 
     if ($result->num_rows > 0) {
         echo "<h1 class='table-info'>Your profile info</h1>";

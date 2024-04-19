@@ -184,12 +184,19 @@ if ($result->num_rows > 0) {
 } ?>
 
 <div class="popup" id="confirmationPopup" style="display: none;">
-        <div class="popup-content">
-            <p>Are you sure you want to submit the form?</p>
-            <button onclick="submitForm()">Yes</button>
-            <button onclick="closePopup()">No</button>
+    <div class="popup-content modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to submit the form?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitForm()">Yes</button>
+                <button class="btn btn-secondary" onclick="closePopup()">No</button>
+            </div>
         </div>
     </div>
+</div>
+
     
     <div class="container form-control">
     <div class="text-center">
@@ -252,7 +259,7 @@ if ($result->num_rows > 0) {
                 <label class="form-check-label" for="checkbox">Did you want to receive updates</label>
             </div>
 
-            <div class="form-group col my-3">
+        <div class="form-group col my-3">
         <div class="container">
           <label for="datefield" class="form-label">Gender</label>
           <div class="form-check form-check-inline">

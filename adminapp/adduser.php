@@ -25,6 +25,94 @@ if (isset($_SESSION["admin_logged_in"]) && $_SESSION["admin_logged_in"] === true
     .formError {
         color: red;
     }
+
+    .profile {
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    margin: auto;
+  }
+
+  .col {
+    width: 40%;
+    margin: auto;
+  }
+
+
+  /* Custom CSS */
+  .form-range {
+    width: 100%;
+    /* Makes the range input fill the entire width of its container */
+    margin-top: 10px;
+    /* Adds some space between the range input and the error message */
+    border: 2px solid red;
+    border-radius: 20px;
+  }
+
+  .form-group p {
+    margin-top: 5px;
+    /* Adds some space between the range input and the paragraph */
+  }
+
+  /* Custom CSS */
+  .btn-primary {
+    background-color: #007bff;
+    /* Blue */
+    border-color: #007bff;
+    /* Blue */
+
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    /* Darker blue */
+    border-color: #0056b3;
+    /* Darker blue */
+  }
+
+  .btn-primary:focus,
+  .btn-primary.focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    /* Blue with opacity */
+  }
+
+  .btn-lg {
+    padding: 10px 30px;
+    /* Large padding */
+    font-size: 1.25rem;
+    /* Larger font size */
+    width: 35%;
+    border-radius: 30px;
+  }
+
+  .mt-3 {
+    margin-top: 15px;
+    /* Margin top 15px */
+  }
+
+  /* Custom CSS */
+  .formError {
+    color: red;
+    /* Set text color to red */
+    font-size: 14px;
+    /* Set font size */
+    font-weight: bold;
+    /* Set font weight to bold */
+    /* Add any additional styling here */
+  }
+
+
+
+
+  #serror {
+    display: flex;
+   justify-content: center;
+    align-items: center;
+  
+   } 
+    .error-container {
+    display: block;
+   }
 </style>
 
 <body>
@@ -48,89 +136,107 @@ if (isset($_SESSION["admin_logged_in"]) && $_SESSION["admin_logged_in"] === true
 
 
 
-    <div class="mx-5">
+<div class="container form-control">
+    <div class="text-center">
+      <img class="profile" src="../assets/newac.svg" alt="">
+      <h3 class="heading">Add New User</h3>
+    </div>
         <form enctype="multipart/form-data" name="userInfo" action="adduser_server.php" onsubmit="return validateForm()" method="post">
-            <div class="mb-3" id="firstname">
-                <h3>Add New User</h3>
+            <div class="form-group col my-3" id="firstname">
+                
                 <input type="text" name="fname" placeholder="First Name" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="lastname">
+            <div class="form-group col my-3" id="lastname">
                 <input type="text" name="lname" placeholder="Last Name" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="uname">
+            <div class="form-group col my-3" id="uname">
                 <input type="text" name="username" placeholder="Username" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="email">
+            <div class="form-group col my-3" id="email">
                 <input type="text" name="femail" placeholder="Email" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="date">
+            <div class="form-group col my-3" id="date">
                 <label for="datefield" class="form-label">Date</label>
                 <input type="date" name="date" class="form-control" id="datefield" min="1900-01-01" max="2024-12-31" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="mobile">
+            <div class="form-group col my-3" id="mobile">
                 <input type="tel" placeholder="Mobile" name="mobile" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="pass">
+            <div class="form-group col my-3" id="pass">
                 <input type="password" name="password" value="username" placeholder="Password" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <div class="mb-3" id="cpass">
+            <div class="form-group col my-3" id="cpass">
                 <input type="password" name="cpassword" value="username" placeholder="Confirm Password" class="form-control" />
                 <b><span class="formError"></span></b>
             </div>
-            <input type="file" class="form-control" name="file" />
-            <b><span class="formError"></span></b>
-            <div class="mb-3 form-check">
+            
+      <div id="skillError" class=" text-danger"></div>
+      <div class="form-group col my-3 file" id="image">
+        <label for="file" class="form-label">Latest Photo</label>
+        <input type="file" id="file" class="form-control" name="file" accept="image/png, image/gif, image/jpeg" />
+        <b><span class="formError"></span></b>
+      </div>
+            <div class="form-group col my-3 form-check">
                 <input type="checkbox" name="update" value="1" class="form-check-input" id="checkbox" />
                 <label class="form-check-label" for="checkbox">Did you want to receive updates</label>
             </div>
-            <fieldset>
-                <legend>Gender</legend>
-                <div class="form-check mt-0 malediv">
-                    <input class="form-check-input" type="radio" id="maleradio" name="gender" value="male" />
-                    <label class="form-check-label" for="maleradio">Male</label>
-                </div>
+            <div class="form-group col my-3">
+        <div class="container">
+          <label for="datefield" class="form-label">Gender</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="maleradio" name="gender" value="male" />
+            <label class="form-check-label" for="maleradio">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="femaleradio" name="gender" value="female" />
+            <label class="form-check-label" for="femaleradio">Female</label>
+          </div>
+        </div>
+        <span id="genderError" class="text-danger"></span>
+      </div>
+      <input type="hidden" name="role" id="role" value="user">
 
-                <div class="form-check femalediv">
-                    <input class="form-check-input" type="radio" id="femaleradio" name="gender" value="female" />
-                    <label class="form-check-label" for="femaleradio">Female</label>
-                </div>
-            </fieldset>
-            <span id="genderError" class="text-danger"></span>
-            <input type="hidden" name="role" id="role" value="user">
-            <div class="form-check form-switch mt-3">
-                <input class="form-check-input" name="actype" type="checkbox" id="adminSwitch" aria-checked="false" />
-                <label class="form-check-label" for="adminSwitch">Admin</label>
-            </div>
-            <div class="form-check form-switch mt-3">
-                <input class="form-check-input" name="actype" type="checkbox" id="userSwitch" aria-checked="true" checked />
-                <label class="form-check-label" for="userSwitch">User</label>
-            </div>
+<div class="form-check form-switch my-3 form-group col">
+  <label class="form-label  " for="accountType">Account Type</label>
+  <div class="form-check form-switch-inline">
+    <input class="form-check-input" name="actype" type="checkbox" id="adminSwitch" aria-checked="false" />
+    <label class="form-check-label" for="adminSwitch">Admin</label>
+  </div>
+  <div class="form-check form-switch-inline">
+    <input class="form-check-input" name="actype" type="checkbox" id="userSwitch" aria-checked="true" checked />
+    <label class="form-check-label" for="userSwitch">User</label>
+  </div>
+</div>
 
-            <span id="useradminError" class="text-danger"></span>
-            <select class="form-select" name="skills" id="skills">
-                <option value="non">Select your skill</option>
-                <option value="html">html</option>
-                <option value="css">css</option>
-                <option value="javascript">javascript</option>
-            </select>
-            <div id="skillError" class="text-danger"></div>
-            <div class="mb-3">
+
+            <div class="form-group col mt-3" id="serror">
+        <select class="form-group col my-3 form-select" name="skills" id="skills">
+          <option value="non">Select your skill</option>
+          <option value="html">html</option>
+          <option value="css">css</option>
+          <option value="javascript">javascript</option>
+        </select><br>
+        <div class="error-container">
+          <b><span class="formError"></span></b>
+        </div>
+      </div>
+            <div class="form-group col my-3">
                 <label for="age" class="form-label mt-3">your age</label>
                 <input type="hidden" name="uagevalue" value="">
                 <p id="ageValue"></p>
                 <input style="width: 250px" type="range" name="age" class="form-range" min="15" max="100" id="age" /><br>
                 <span id="ageError" style="display: inline;" class="text-danger"></span>
             </div>
-
-
-            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            <div class="container text-center">
+            <button type="submit" name="submit" class="btn btn-primary btn-lg mt-3">Add user</button>
+            </div>
         </form>
     </div>
     </div>
