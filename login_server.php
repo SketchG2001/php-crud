@@ -7,22 +7,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
+    // Check if username is empty
     if (empty($username)) {
-        $error_message = "username is required to access";
+        $error_message = "Username is required to access";
         header("Location: login.php?error=".urlencode($error_message));
         exit();
     }
-    elseif(!(preg_match("/[0-9]/", $_POST["username"]))) {
-        $error_message = "username must contains a number";
+    // Check if username contains a number
+    elseif (!(preg_match("/[0-9]/", $_POST["username"]))) {
+        $error_message = "Username must contain a number";
         header("Location: login.php?error=".urlencode($error_message));
         exit();  
     }
+    // Check if password is empty
     if (empty($password)) {
-        $error_message = "password is required to access";
+        $error_message = "Password is required to access";
         header("Location: login.php?error=".urlencode($error_message));
         exit();
     }
-     else {
+    else {
         // Prepare SQL statement to check for user
         $stmt = $conn->prepare("SELECT id, username, password FROM userDB WHERE username=?");
         

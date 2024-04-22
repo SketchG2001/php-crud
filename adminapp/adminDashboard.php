@@ -1,155 +1,140 @@
 <?php
 
-// session_start();
-// Check if the success message is present in the URL
-
-
+// Start the session
 session_start();
+
+// Prevent caching
 header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: 0");
 
+// Redirect to login page if user is not logged in
 if (!isset($_SESSION["username"])) {
-    $error_message = "you have to login first.";
+    $error_message = "You have to login first.";
     header("Location: admin.php?message=" . urlencode($error_message));
     exit();
 }
 
-
-// messages from adduserserver.php
+// Display messages from adduserserver.php if present
 if (isset($_GET['message'])) {
-    // Retrieve and decode the message from the URL parameter
     $message = urldecode($_GET['message']);
-    // Display the message as a dismissable alert
     echo '<div class="alert alert-info alert-dismissible fade show" role="alert">';
     echo $message;
     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     echo '</div>';
 }
 
+// Display success message if present
 if (isset($_GET['success'])) {
-    // Decode the URL-encoded success message
     $success_message = urldecode($_GET['success']);
-    // Display the success message as a dismissable alert
     echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
     echo $success_message;
     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     echo '</div>';
 }
 
-
+// Get username from session
 $username = $_SESSION["username"];
-// echo"$username";
-// echo"<br>";
+
+// Include database configuration file
 include("config.php");
-$stmt = $conn->prepare("SELECT id, username,role FROM userDB WHERE username=?");
+
+// Prepare and execute SQL query to retrieve user details
+$stmt = $conn->prepare("SELECT id, username, role FROM userDB WHERE username=?");
 if ($stmt === false) {
     die("Error preparing statement: " . $conn->error);
 }
-
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// If user found, verify role
 if ($result->num_rows == 1) {
-    // User found, verify password
     $row = $result->fetch_assoc();
     $role = $row["role"];
-    // echo"$role";
 
+    // If user is admin, display admin views
     if ($role == "admin") {
         $sql = "SELECT * FROM userDB";
         $result = $conn->query($sql);
 
+        // HTML for delete user popup
         echo '<div id="deleteUserPopup" class="popup" style="display: none;">
-    <div class="popup-content">
-        <p>Are you sure you want to delete the user?</p>
-        <button id="deleteUserConfirm">Yes</button>
-        <button id="deleteUserCancel">No</button>
-    </div>
-</div>';
+            <div class="popup-content">
+                <p>Are you sure you want to delete the user?</p>
+                <button id="deleteUserConfirm">Yes</button>
+                <button id="deleteUserCancel">No</button>
+            </div>
+        </div>';
 
+        // If users found, display them in a table
+        if ($result->num_rows > 0) {
+            echo "<div class='mt-3' style='text-align: center;'>";
+            echo "<h1 class='table-info' style='text-align: center; color: blue; font-size: 24px;'>Admin Views<span>.
+                $username.</span></h1>";
+            echo "</div>";
+            echo "<div class='mt-3' style='text-align: right;'>";
+            echo '<td class="btn btn-primary" style="text-align: right;"><a href="adminlogout.php" class="btn btn-primary">Logout</a></td>';
+            echo "</div>";
+            echo "<hr>";
+            echo '<table class="table-primary table table-striped ">';
+            echo '<tr>
+                <th>userid</>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Profile</th>
+                <th>skills</th>
+                <th>Role</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>';
 
+            // Display user details in table rows
+            while ($row = $result->fetch_assoc()) {
+                // Fetch user details
+                $userid = $row['id'];
+                $firstname = $row["firstname"];
+                $lastname = $row["lastname"];
+                $username = $row["username"];
+                $gender = $row["gender"];
+                $dob = $row["dob"];
+                $role = $row["role"];
+                $skill = $row["skills"];
+                $age = $row["age"];
+                $updates = $row["updates"];
+                $email = $row["email"];
+                $mobile = $row["mobile"];
+                $image = $row["file"];
 
-
-if ($result->num_rows > 0) {
-echo "<div class='mt-3' style='text-align: center;'>";
-    echo "<h1 class='table-info' style='text-align: center; color: blue; font-size: 24px;'>Admin Views<span>.
-            $username.</span></h1>";
-
-    echo "</div>";
-echo "<div class='mt-3' style='text-align: right;'>";
-    echo '<td class="btn btn-primary" style="text-align: right;"><a href="adminlogout.php"
-            class="btn btn-primary">Logout</a></td>';
-    echo "</div>";
-echo "
-<hr>";
-echo '<table class="table-primary table table-striped ">';
-    echo '<tr>
-        <th>userid</>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Username</th>
-        <th>Gender</th>
-        <th>DOB</th>
-        <th>Age</th>
-        <th>Email</th>
-        <th>Mobile</th>
-        <th>Profile</th>
-        <th>skills</th>
-        <th>Role</th>
-        <th>Update</th>
-        <th>Delete</th>
-    </tr>';
-
-    while ($row = $result->fetch_assoc()) {
-    $userid = $row['id'];
-    $firstname = $row["firstname"];
-    $lastname = $row["lastname"];
-    $username = $row["username"];
-    $gender = $row["gender"];
-    $dob = $row["dob"];
-    $role = $row["role"];
-    $skill = $row["skills"];
-    $age = $row["age"];
-    $updates = $row["updates"];
-    $email = $row["email"];
-    $mobile = $row["mobile"];
-    $image = $row["file"];
-
-
-    $imagePath = $image;
-
-
-
-
-    if ($role == "user") {
-    echo '<tr>';
-        echo '<td class="table-info">' . $userid . '</td>';
-        echo '<td class="table-info">' . $firstname . '</td>';
-        echo '<td class="table-info">' . $lastname . '</td>';
-        echo '<td class="table-info">' . $username . '</td>';
-        echo '<td class="table-info">' . $gender . '</td>';
-        echo '<td class="table-info">' . $dob . '</td>';
-        echo '<td class="table-info">' . $age . '</td>';
-        echo '<td class="table-info">' . $email . '</td>';
-        echo '<td class="table-info">' . $mobile . '</td>';
-        echo '<td class="table-info"><img src="'.$imagePath.'" alt="User Image" style="max-width: 90px;"></td>';
-        echo '<td class="table-info">' . $skill . '</td>';
-        echo '<td class="table-info">' . $role . '</td>';
-        echo '<td class="table-info"><a href="update.php?username=' . $username . '" class="btn btn-primary">Edit
-                Details</a></td>';
-        echo '<td class="table-info"><a href="admindel.php?username=' . $username . '" class="btn btn-primary deleteUserLink">Delete User</a></td>';
-
-        echo '</tr>';
+                // Display user details in table cells
+                echo '<tr>';
+                echo '<td class="table-info">' . $userid . '</td>';
+                echo '<td class="table-info">' . $firstname . '</td>';
+                echo '<td class="table-info">' . $lastname . '</td>';
+                echo '<td class="table-info">' . $username . '</td>';
+                echo '<td class="table-info">' . $gender . '</td>';
+                echo '<td class="table-info">' . $dob . '</td>';
+                echo '<td class="table-info">' . $age . '</td>';
+                echo '<td class="table-info">' . $email . '</td>';
+                echo '<td class="table-info">' . $mobile . '</td>';
+                echo '<td class="table-info"><img src="'.'/php-crud/'.$image.'" alt="User Image" style="max-width: 90px;"></td>';
+                echo '<td class="table-info">' . $skill . '</td>';
+                echo '<td class="table-info">' . $role . '</td>';
+                echo '<td class="table-info"><a href="update.php?username=' . $username . '" class="btn btn-primary">Edit Details</a></td>';
+                echo '<td class="table-info"><a href="admindel.php?username=' . $username . '" class="btn btn-primary deleteUserLink">Delete User</a></td>';
+                echo '</tr>';
+            }
+            echo '</table>';
+        }
+    } else {
+        echo "No result";
     }
-    }
-    }
-
-    echo '</table>';
-} else {
-echo "No result";
-}
 }
 ?>
 
@@ -162,8 +147,7 @@ echo "No result";
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    /* semi-transparent black background */
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black background */
     z-index: 9999;
 }
 
@@ -219,13 +203,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">

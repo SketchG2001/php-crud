@@ -1,12 +1,24 @@
 <?php
 // echo"hello";
+
+
+// DB connection file
 include("config.php");
-$targetDir = '../uploads/';
 
+// getting current directory name 
+$currentDirectory = dirname(__FILE__);
+// parent directory of the curent directory
+$parentDirectory = dirname($currentDirectory);
 
+// files upload location
+$uploadsFolderPath = $parentDirectory . "/uploads";
+
+// collect data from the html
 if (isset($_POST["submit"])) {
+
+
+    // file processing
     $file = $_FILES['file'];
-    // print_r($file); 
     $filename = $_FILES['file']['name'];
     $fileTMPName = $_FILES['file']['tmp_name'];
     $filesize = $_FILES['file']['size'];
@@ -21,37 +33,16 @@ if (isset($_POST["submit"])) {
         if ($fileerror === 0) {
             if ($filesize < 1000000) {
                 $fileNamenew = uniqid('', true) . "." . $fileactualExt;
-                $fileDestination = $targetDir. $fileNamenew;
-                // echo $fileDestination;
-                // exit;
+                $fileDestination = $uploadsFolderPath . "/" . $fileNamenew;
+            //   moving file to the uploads folder
                 if (move_uploaded_file($fileTMPName, $fileDestination)) {
-
+                    $dbfile = 'uploads/' . $fileNamenew;
+                    // converting password to the hash 
                     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-                    // echo $password."<br>";
-                    // echo $_POST["fname"]."<br>";
-                    // echo $_POST["lname"]."<br>";
-                    //  echo $_POST["username"]."<br>";
-                    //  echo $_POST["femail"]."<br>";
-                    //  echo $_POST["mobile"]."<br>";
-                    //  echo $_POST["password"]."<br>";
-                    //  echo $_POST["cpassword"]."<br>";
-                    //  echo $fileDestination ."<br>";
-                    //  echo $_POST["date"]."<br>";
-                    //  echo $_POST["update"]."<br>";
-                    //  echo $_POST["gender"]."<br>";
-                    //  echo $_POST["role"]."<br>";
-                    //  echo $_POST["uagevalue"]."<br>";
-                    //  echo $_POST["skills"]."<br>";
-                    //  if (!isset($_POST["update"])){
-                    //     echo"empty";
-                    //  }else{
-                    //     echo "yes";
-                    //  }
-                    // die();
 
+                    // processing user data with validation
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (empty($_POST["fname"])) {
-                            // echo "first name required";
                             $error_message = "first name required";
                             header("Location: adduser.php?error=" . urlencode($error_message));
                             exit();
@@ -63,9 +54,9 @@ if (isset($_POST["submit"])) {
                             exit();
                         }
                         echo "$firstname <br>";
-                        // exit();
+                       
                         if (empty($_POST["lname"])) {
-                            // echo "last name required";
+                            
                             $error_message = "last name required";
                             header("Location: adduser.php?error=" . urlencode($error_message));
                             exit();
@@ -78,7 +69,7 @@ if (isset($_POST["submit"])) {
                         }
                         echo "$lastname <br>";
                         if (empty($_POST["username"])) {
-                            // echo "username required";
+                            
                             $error_message = "username required";
                             header("Location: adduser.php?error=" . urlencode($error_message));
                             exit();
@@ -89,9 +80,9 @@ if (isset($_POST["submit"])) {
                             header("Location: adduser.php?error=" . urlencode($error_message));
                             exit();
                         }
-                        echo "$username <br>";
+                        
                         if (empty($_POST["femail"])) {
-                            // echo "Email required";
+                            
                             $error_message = "Email must required.";
                             header("Location: adduser.php?error=" . urlencode($error_message));
                             exit();
@@ -103,7 +94,7 @@ if (isset($_POST["submit"])) {
                         }
                         echo $email . "<br>";
                         if (empty($_POST["mobile"])) {
-                            // echo "Email required";
+                            
                             $error_message = "Mobile number is required.";
                             header("adduser.php" . urlencode($error_message));
                         } elseif (preg_match("/^\d{10}$/", $_POST["mobile"]) && strlen($_POST["mobile"]) == 10) {
@@ -124,7 +115,7 @@ if (isset($_POST["submit"])) {
                             exit();
                         } else {
                             $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-                            echo $password . "<br>";
+                            
                         }
                         $date_regex = '/^\d{4}-\d{2}-\d{2}$/';
                         if (empty($_POST["date"])) {
@@ -134,8 +125,8 @@ if (isset($_POST["submit"])) {
                         } elseif (isset($_POST["date"]) && preg_match("$date_regex", $_POST["date"])) {
                             $date = $_POST["date"];
                         }
-                        echo $date . "<br>";
-                        // exit();
+                        
+                        
                         if (!isset($_POST["gender"])) {
                             $error_message = "Please choose you gender";
                             header("Location: adduser.php?error=" . urlencode($error_message));
@@ -143,8 +134,7 @@ if (isset($_POST["submit"])) {
                         } elseif (isset($_POST["gender"]) && $_POST["gender"] === "male" || $_POST["gender"] === "female") {
                             $gender = strtolower($_POST["gender"]);
                         }
-                        echo "$gender" . "<br>";
-                        // exit();
+                        
 
                         if (!isset($_POST["role"])) {
                             $error_message = "please select you role.";
@@ -155,7 +145,7 @@ if (isset($_POST["submit"])) {
                             $error_message = "role error please check";
                             header("Location: adduser.php?error=" . urlencode($error_message));
                         }
-                        echo $role . "<br>";
+                       
                         if (!isset($_POST["uagevalue"]) || empty($_POST["uagevalue"])) {
                             $error_message = "please select your age.";
                             header("Location: adduser.php?error=" . urlencode($error_message));
@@ -168,7 +158,7 @@ if (isset($_POST["submit"])) {
                                 exit();
                             }
                         }
-                        echo $age . "<br>";
+                        
 
                         if (!isset($_POST["skills"]) || empty($_POST["skills"])) {
                             $error_message = "Please select your skill";
@@ -177,8 +167,6 @@ if (isset($_POST["submit"])) {
                         } elseif (isset($_POST["skills"])) {
                             $skill = $_POST["skills"];
                         }
-                        echo $skill . "<br>";
-
 
                         $update = $_POST["update"];
                         if (!isset($update)) {
@@ -186,15 +174,10 @@ if (isset($_POST["submit"])) {
                         } elseif ($update == 1) {
                             $update = "YES";
                         }
-                        echo $update . "<br>";
+                        
                     }
-                    // echo $firstname ."<br>";
-                    // echo $lastname ."<br>";
-                    // echo $email ."<br>";
-                    // echo $password ."<br>";
-                    // echo $username ."<br>";
-                    // exit();
-                    $sql = "INSERT INTO userDB (firstname, lastname, username, email, mobile, password,dob,file, gender,role,skills, age,updates)VALUES ('$firstname','$lastname','$username','$email','$mobile','$password','$date','$fileDestination','$gender','$role','$skill','$age','$update')";
+                            // database insertion operation to add the new user
+                    $sql = "INSERT INTO userDB (firstname, lastname, username, email, mobile, password,dob,file, gender,role,skills, age,updates)VALUES ('$firstname','$lastname','$username','$email','$mobile','$password','$date','$dbfile','$gender','$role','$skill','$age','$update')";
                     if ($conn->query($sql)) {
 
                         $success_message = "user has been added succesfully";
@@ -205,9 +188,13 @@ if (isset($_POST["submit"])) {
                         header("Location: adduser.php?message=" . urlencode($success_message));
                         exit();
                     }
+                    // close db connection
                     $conn->close();
                 }
-            } else {
+
+            }
+                // any thing wrong with the data or db operation then this code will execute
+             else {
 
                 $error_message = 'file size too large';
                 header("Location: adduser.php?message=" . urlencode($error_message));

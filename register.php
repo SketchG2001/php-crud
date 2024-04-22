@@ -1,221 +1,199 @@
 <?php
-// echo"hello";
+// Include the configuration file
 include("config.php");
-// $targetDir = "uploads/";
+
+// Check if the form is submitted
 if (isset($_POST["submit"])) {
+    // Retrieve file details
     $file = $_FILES['file'];
-    // print_r($file); 
     $filename = $_FILES['file']['name'];
     $fileTMPName = $_FILES['file']['tmp_name'];
     $filesize = $_FILES['file']['size'];
     $fileerror = $_FILES['file']['error'];
     $filetype = $_FILES['file']['type'];
 
-    $fileExt = explode('.', $filename);
-    $fileactualExt = strtolower(end($fileExt));
+    // Define allowed file extensions
     $allowed = array('jpg', 'jpeg', 'png', 'pdf');
 
+    // Extract file extension
+    $fileExt = explode('.', $filename);
+    $fileactualExt = strtolower(end($fileExt));
+
+    // Check if the file extension is allowed
     if (in_array($fileactualExt, $allowed)) {
+        // Check if there is no file upload error
         if ($fileerror === 0) {
+            // Check if the file size is within limit
             if ($filesize < 1000000) {
+                // Generate a unique filename
                 $fileNamenew = uniqid('', true) . "." . $fileactualExt;
                 $fileDestination = 'uploads/' . $fileNamenew;
+
+                // Move the uploaded file to the destination folder
                 if (move_uploaded_file($fileTMPName, $fileDestination)) {
+                    $dbfile = 'uploads/' . $fileNamenew;
 
+                    // Hash the password
                     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-                    // echo $password."<br>";
-                    // echo $_POST["fname"]."<br>";
-                    // echo $_POST["lname"]."<br>";
-                    //  echo $_POST["username"]."<br>";
-                    //  echo $_POST["femail"]."<br>";
-                    //  echo $_POST["mobile"]."<br>";
-                    //  echo $_POST["password"]."<br>";
-                    //  echo $_POST["cpassword"]."<br>";
-                    //  echo $fileDestination ."<br>";
-                    //  echo $_POST["date"]."<br>";
-                    //  echo $_POST["update"]."<br>";
-                    //  echo $_POST["gender"]."<br>";
-                    //  echo $_POST["role"]."<br>";
-                    //  echo $_POST["uagevalue"]."<br>";
-                    //  echo $_POST["skills"]."<br>";
-                    //  if (!isset($_POST["update"])){
-                    //     echo"empty";
-                    //  }else{
-                    //     echo "yes";
-                    //  }
-                    // die();
 
-                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        if (empty($_POST["fname"])) {
-                            // echo "first name required";
-                            $error_message = "first name required";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (preg_match("/^[a-zA-Z]+$/", $_POST["fname"])) {
-                            $firstname = $_POST["fname"];
-                        } else {
-                            $error_message = "First Name must contains only alphabetic characters.";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        }
-                        echo "$firstname <br>";
-                        // exit();
-                        if (empty($_POST["lname"])) {
-                            // echo "last name required";
-                            $error_message = "last name required";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (preg_match("/^[a-zA-Z]+$/", $_POST["lname"])) {
-                            $lastname = $_POST["lname"];
-                        } else {
-                            $error_message = "Last Name must contains only alphabetic characters.";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        }
-                        echo "$lastname <br>";
-                        if (empty($_POST["username"])) {
-                            // echo "username required";
-                            $error_message = "username required";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (preg_match("/[0-9]/", $_POST["username"])) {
-                            $username = $_POST["username"];
-                        } else {
-                            $error_message = "username must contains a number";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        }
-                        echo "$username <br>";
-                        if (empty($_POST["femail"])) {
-                            // echo "Email required";
-                            $error_message = "Email must required.";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (preg_match("/^[^\s@]+@[^\s@]+\.[^\s@]+$/", $_POST["femail"])) {
-                            $email = $_POST["femail"];
-                        } else {
-                            $error_message = "invalid email address.";
-                            header("newregister.php" . urlencode($error_message));
-                        }
-                        echo $email . "<br>";
-                        if (empty($_POST["mobile"])) {
-                            // echo "Email required";
-                            $error_message = "Mobile number is required.";
-                            header("newregister.php" . urlencode($error_message));
-                        } elseif (preg_match("/^\d{10}$/", $_POST["mobile"]) && strlen($_POST["mobile"]) == 10) {
-                            $mobile = $_POST["mobile"];
-                        } else {
-                            $error_message = "Invalid mobile number.";
-                            header("newregister.php" . urlencode($error_message));
-                            exit();
-                        }
-                        echo $mobile . "<br>";
-                        if (empty($_POST["password"])) {
-                            $error_message = "password required.";
-                            header("newregister.php" . urlencode($error_message));
-                            exit();
-                        } elseif ($_POST["password"] != $_POST["cpassword"]) {
-                            $error_message = "confirm password doesn't matching";
-                            header("newregister.php" . urlencode($error_message));
-                            exit();
-                        } else {
-                            $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-                            echo $password . "<br>";
-                        }
-                        $date_regex = '/^\d{4}-\d{2}-\d{2}$/';
-                        if (empty($_POST["date"])) {
-                            $error_message = "Please enter the date is required.";
-                            header("newregister.php" . urlencode($error_message));
-                            exit();
-                        } elseif (isset($_POST["date"]) && preg_match("$date_regex", $_POST["date"])) {
-                            $date = $_POST["date"];
-                        }
-                        echo $date . "<br>";
-                        // exit();
-                        if (!isset($_POST["gender"])) {
-                            $error_message = "Please choose you gender";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (isset($_POST["gender"]) && $_POST["gender"] === "male" || $_POST["gender"] === "female") {
-                            $gender = strtolower($_POST["gender"]);
-                        }
-                        echo "$gender" . "<br>";
-                        // exit();
-
-                        if (!isset($_POST["role"])) {
-                            $error_message = "please select you role.";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                        } elseif (isset($_POST["role"]) && $_POST["role"] === "admin" || $_POST["role"] === "user") {
-                            $role = strtolower($_POST["role"]);
-                        } else {
-                            $error_message = "role error please check";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                        }
-                        echo $role . "<br>";
-                        if (!isset($_POST["uagevalue"]) || empty($_POST["uagevalue"])) {
-                            $error_message = "please select your age.";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (isset($_POST["uagevalue"])) {
-                            $age = $_POST["uagevalue"];
-                            if ($age < 18 || $age > 100) {
-                                $error_message = "invalid age value.";
-                                header("Location: newregister.php?error=" . urlencode($error_message));
-                                exit();
-                            }
-                        }
-                        echo $age . "<br>";
-
-                        if (!isset($_POST["skills"]) || empty($_POST["skills"])) {
-                            $error_message = "Please select your skill";
-                            header("Location: newregister.php?error=" . urlencode($error_message));
-                            exit();
-                        } elseif (isset($_POST["skills"])) {
-                            $skill = $_POST["skills"];
-                        }
-                        echo $skill . "<br>";
-
-
-                        $update = $_POST["update"];
-                        if (!isset($update)) {
-                            $update = "NO";
-                        } elseif ($update == 1) {
-                            $update = "YES";
-                        }
-                        echo $update . "<br>";
+                    // Validate form data
+                    // Check first name
+                    if (empty($_POST["fname"])) {
+                        $error_message = "First name is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $_POST["fname"])) {
+                        $error_message = "First name must contain only alphabetic characters.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
                     }
-                    // echo $firstname ."<br>";
-                    // echo $lastname ."<br>";
-                    // echo $email ."<br>";
-                    // echo $password ."<br>";
-                    // echo $username ."<br>";
-                    $sql = "INSERT INTO userDB (firstname, lastname, username, email, mobile, password,dob,file, gender,role,skills, age,updates)VALUES ('$firstname','$lastname','$username','$email','$mobile','$password','$date','$fileDestination','$gender','$role','$skill','$age','$update')";
-                    if ($conn->query($sql)) {
+                    $firstname = $_POST["fname"];
 
-                        $success_message = "You have registered succesfully";
+                    // Check last name
+                    if (empty($_POST["lname"])) {
+                        $error_message = "Last name is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/^[a-zA-Z]+$/", $_POST["lname"])) {
+                        $error_message = "Last name must contain only alphabetic characters.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $lastname = $_POST["lname"];
+
+                    // Check username
+                    if (empty($_POST["username"])) {
+                        $error_message = "Username is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/[0-9]/", $_POST["username"])) {
+                        $error_message = "Username must contain a number.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $username = $_POST["username"];
+
+                    // Check email
+                    if (empty($_POST["femail"])) {
+                        $error_message = "Email is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/^[^\s@]+@[^\s@]+\.[^\s@]+$/", $_POST["femail"])) {
+                        $error_message = "Invalid email address.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $email = $_POST["femail"];
+
+                    // Check mobile
+                    if (empty($_POST["mobile"])) {
+                        $error_message = "Mobile number is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/^\d{10}$/", $_POST["mobile"]) || strlen($_POST["mobile"]) != 10) {
+                        $error_message = "Invalid mobile number.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $mobile = $_POST["mobile"];
+
+                    // Check password
+                    if (empty($_POST["password"])) {
+                        $error_message = "Password is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif ($_POST["password"] != $_POST["cpassword"]) {
+                        $error_message = "Passwords do not match.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+
+                    // Check date
+                    if (empty($_POST["date"])) {
+                        $error_message = "Date of birth is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $_POST["date"])) {
+                        $error_message = "Invalid date format.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $date = $_POST["date"];
+
+                    // Check gender
+                    if (!isset($_POST["gender"])) {
+                        $error_message = "Gender is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    } elseif ($_POST["gender"] !== "male" && $_POST["gender"] !== "female") {
+                        $error_message = "Invalid gender value.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $gender = $_POST["gender"];
+
+                    // Check role
+                    if (!isset($_POST["role"]) || ($_POST["role"] !== "admin" && $_POST["role"] !== "user")) {
+                        $error_message = "Invalid role value.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $role = $_POST["role"];
+
+                    // Check age
+                    if (!isset($_POST["uagevalue"]) || empty($_POST["uagevalue"])) {
+                        $error_message = "Age is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $age = $_POST["uagevalue"];
+                    if ($age < 18 || $age > 100) {
+                        $error_message = "Invalid age value.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+
+                    // Check skills
+                    if (!isset($_POST["skills"]) || empty($_POST["skills"])) {
+                        $error_message = "Skill is required.";
+                        header("Location: newregister.php?error=" . urlencode($error_message));
+                        exit();
+                    }
+                    $skill = $_POST["skills"];
+
+                    // Check if updates checkbox is checked
+                    $update = isset($_POST["update"]) ? "YES" : "NO";
+
+                    // Insert user data into the database
+                    $sql = "INSERT INTO userDB (firstname, lastname, username, email, mobile, password, dob, file, gender, role, skills, age, updates) 
+                            VALUES ('$firstname', '$lastname', '$username', '$email', '$mobile', '$password', '$date', '$dbfile', '$gender', '$role', '$skill', '$age', '$update')";
+
+                    // Execute the SQL query
+                    if ($conn->query($sql)) {
+                        $success_message = "You have registered successfully";
                         header("Location: login.php?message=" . urlencode($success_message));
                         exit();
                     } else {
-                        $success_message = "something went wrong please try again. <br>" . $conn->error;
-                        header("Location: newregister.php?message=" . urlencode($success_message));
+                        $error_message = "Something went wrong. Please try again.<br>" . $conn->error;
+                        header("Location: newregister.php?error=" . urlencode($error_message));
                         exit();
                     }
-                    $conn->close();
+                    $conn->close(); // Close the database connection
                 }
             } else {
-
-                $error_message = 'file size too large';
-                header("Location: newregister.php?message=" . urlencode($error_message));
+                $error_message = 'File size is too large';
+                header("Location: newregister.php?error=" . urlencode($error_message));
                 exit();
             }
         } else {
-            $error_message = "there was an error.";
-            header("Location: newregister.php?message=" . urlencode($error_message));
+            $error_message = "There was an error uploading the file.";
+            header("Location: newregister.php?error=" . urlencode($error_message));
             exit();
         }
     } else {
-        $error_message = 'file type is not allowed';
-        header("Location: newregister.php?message=" . urlencode($error_message));
+        $error_message = 'File type is not allowed';
+        header("Location: newregister.php?error=" . urlencode($error_message));
         exit();
     }
 }
+?>

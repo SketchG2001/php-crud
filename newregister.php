@@ -29,6 +29,7 @@ if (isset($_GET['message'])) {
 </head>
 
 <style>
+  /* Custom CSS */
   .profile {
     height: 100px;
     width: 100px;
@@ -41,85 +42,62 @@ if (isset($_GET['message'])) {
     margin: auto;
   }
 
-
   /* Custom CSS */
   .form-range {
     width: 100%;
-    /* Makes the range input fill the entire width of its container */
     margin-top: 10px;
-    /* Adds some space between the range input and the error message */
     border: 2px solid red;
     border-radius: 20px;
   }
 
   .form-group p {
     margin-top: 5px;
-    /* Adds some space between the range input and the paragraph */
   }
 
   /* Custom CSS */
   .btn-primary {
     background-color: #007bff;
-    /* Blue */
     border-color: #007bff;
-    /* Blue */
-
   }
 
   .btn-primary:hover {
     background-color: #0056b3;
-    /* Darker blue */
     border-color: #0056b3;
-    /* Darker blue */
   }
 
   .btn-primary:focus,
   .btn-primary.focus {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-    /* Blue with opacity */
   }
 
   .btn-lg {
     padding: 10px 30px;
-    /* Large padding */
     font-size: 1.25rem;
-    /* Larger font size */
     width: 35%;
     border-radius: 30px;
   }
 
   .mt-3 {
     margin-top: 15px;
-    /* Margin top 15px */
   }
 
   /* Custom CSS */
   .formError {
     color: red;
-    /* Set text color to red */
     font-size: 14px;
-    /* Set font size */
     font-weight: bold;
-    /* Set font weight to bold */
-    /* Add any additional styling here */
   }
-
-
-
 
   #serror {
     display: flex;
-   justify-content: center;
+    justify-content: center;
     align-items: center;
-  
-   } 
-    .error-container {
+  }
+
+  .error-container {
     display: block;
-   }
+  }
 </style>
-
-
-
 
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
@@ -148,46 +126,55 @@ if (isset($_GET['message'])) {
       <h3 class="heading">Register Here</h3>
     </div>
     <form enctype="multipart/form-data" name="userInfo" action="register.php" onsubmit="return validateForm()" method="post">
+      <!-- First Name Input -->
       <div class=" form-group col my-3" id="firstname">
         <label for="fname" class="form-label">First Name</label>
         <input type="text" id="fname" name="fname" placeholder="First Name" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Last Name Input -->
       <div class=" form-group col my-3" id="lastname">
         <label for="lname" class="form-label">Last Name</label>
         <input type="text" id="lname" name="lname" placeholder="Last Name" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Username Input -->
       <div class=" form-group col my-3" id="uname">
         <label for="username" class="form-label">Username</label>
         <input type="text" id="username" name="username" placeholder="Username" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Email Input -->
       <div class=" form-group col my-3" id="email">
         <label for="femail" class="form-label">Email</label>
         <input type="text" id="femail" name="femail" placeholder="Email" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Date Input -->
       <div class=" form-group col my-3" id="date">
         <label for="date" class="form-label">Date</label>
         <input type="date" id="date" name="date" class="form-control" id="datefield" min="1900-01-01" max="2024-12-31" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Mobile Input -->
       <div class=" form-group col my-3" id="mobile">
         <label for="mobile" class="form-label">Mobile</label>
         <input type="tel" id="mobile" placeholder="Mobile" name="mobile" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Password Input -->
       <div class="form-group col form-group col my-3" id="pass">
         <label for="password" class="form-label">Password</label>
         <input type="password" id="password" name="password" placeholder="Password" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Confirm Password Input -->
       <div class=" form-group col my-3" id="cpass">
         <label for="cpassword" class="form-label">Confirm Password</label>
         <input type="password" id="cpassword" name="cpassword" placeholder="Confirm Password" class="form-control" />
         <b><span class="formError"></span></b>
       </div>
+      <!-- Skills Dropdown -->
       <div class="form-group col mt-3" id="serror">
         <select class="form-group col my-3 form-select" name="skills" id="skills">
           <option value="non">Select your skill</option>
@@ -200,33 +187,34 @@ if (isset($_GET['message'])) {
         </div>
       </div>
 
-      <div id="skillError" class=" text-danger"></div>
-      <div class="form-group col my-3 file" id="image">
-        <label for="file" class="form-label">Latest Photo</label>
-        <input type="file" id="file" class="form-control" name="file" accept="image/png, image/gif, image/jpeg" />
-        <b><span class="formError"></span></b>
-      </div>
-      <div class="form-group col my-3">
-        <div class="container">
-          <label for="datefield" class="form-label">Gender</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="maleradio" name="gender" value="male" />
-            <label class="form-check-label" for="maleradio">Male</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="femaleradio" name="gender" value="female" />
-            <label class="form-check-label" for="femaleradio">Female</label>
-          </div>
+<!-- user profile picture -->
+ <div class="form-group col my-3 file" id="image">
+  <label for="file" class="form-label">Latest Photo</label>
+  <input type="file" id="file" class="form-control" name="file" accept="image/png, image/gif, image/jpeg" />
+  <b><span class="formError"></span></b>
+</div>
+
+      <!-- Gender Radios -->
+      <div class="container form-group col my-3">
+        <label for="datefield" class="form-label">Gender</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="maleradio" name="gender" value="male" />
+          <label class="form-check-label" for="maleradio">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="femaleradio" name="gender" value="female" />
+          <label class="form-check-label" for="femaleradio">Female</label>
         </div>
         <span id="genderError" class="text-danger"></span>
       </div>
+      <!-- Checkbox for updates -->
       <div class=" form-group my-3 col form-check">
         <input type="checkbox" name="update" value="1" class="form-check-input" id="checkbox" />
-        <label class="form-check-label" for="checkbox">Did you want to receive updates</label>
+        <label class="form-check-label" for="checkbox">Do you want to receive updates?</label>
       </div>
-
+      <!-- Hidden Role Input -->
       <input type="hidden" name="role" id="role" value="user">
-
+      <!-- Switches for Account Type -->
       <div class="form-check form-switch my-3 form-group col">
         <label class="form-label  " for="accountType">Account Type</label>
         <div class="form-check form-switch-inline">
@@ -238,10 +226,8 @@ if (isset($_GET['message'])) {
           <label class="form-check-label" for="userSwitch">User</label>
         </div>
       </div>
-
-
       <span id="useradminError" class="text-danger"></span>
-
+      <!-- Range Input for Age -->
       <div class="form-group col my-3">
         <label for="age" class="form-label my-2">Your Age</label>
         <input type="hidden" name="uagevalue" value="">
@@ -250,19 +236,18 @@ if (isset($_GET['message'])) {
         <br>
         <span id="ageError" style="display: inline;" class="text-danger"></span>
       </div>
-
+      <!-- Submit Button -->
       <div class="container text-center">
         <button type="submit" name="submit" class="btn btn-primary btn-lg mt-3">Submit</button>
       </div>
     </form>
   </div>
-  </div>
 </body>
+
 <script>
   const adminSwitch = document.getElementById("adminSwitch");
   const userSwitch = document.getElementById("userSwitch");
   const role = document.getElementById("role");
-
 
   adminSwitch.addEventListener("change", function() {
     if (this.checked) {
@@ -278,7 +263,6 @@ if (isset($_GET['message'])) {
     }
   });
 
-
   document.addEventListener("DOMContentLoaded", function() {
     const toggleSwitches = document.querySelectorAll(
       '[data-toggle="toggle"]'
@@ -288,7 +272,7 @@ if (isset($_GET['message'])) {
     });
   });
 
-  // age validation
+  // Age validation
   const ageRangeInput = document.getElementById("age");
   const ageValueDisplay = document.getElementById("ageValue");
   const hiddenAgeInput = document.querySelector('input[name="uagevalue"]');

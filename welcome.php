@@ -120,8 +120,8 @@ if (isset($_GET['message'])) {
             echo '<td class="table-info">' . $dob . '</td>';
             echo '<td class="table-info">' . $age . '</td>';
             echo '<td class="table-info">' . $email . '</td>';
-            echo '<td class="table-info">' . $mobile . '</td>';
-            echo '<td class="table-info"><img src="' . $image . '" alt="User Image" style="max-width: 100px;"></td>'; // Displaying image as an example
+            echo '<td class="table-info">'  .$mobile . '</td>';
+            echo '<td class="table-info"><img src="'. '/php-crud/'. $image . '" alt="User Image" style="max-width: 100px;"></td>'; // Displaying image as an example
             echo '<td class="table-info">' . $skill . '</td>';
             echo '<td class="table-info">' . $role . '</td>';
             echo '<td class="table-info"><a href="update.php?username=' . $username . '" class="btn btn-primary">Edit Details</a></td>';

@@ -316,7 +316,7 @@ if ($result->num_rows > 0) {
                 <span id="ageError" style="display: inline;" class="formError"></span>
             </div>
             <div class="container text-center">
-            <button type="submit" name="submit" onclick="return validateFormAndConfirm()" value="userInfo" class="btn btn-primary">Update Details</button>
+            <button type="submit" name="submit" onclick="return validateFormAndConfirm() " value="userInfo" class="btn btn-primary">Update Details</button>
             <button type="submit" id="submitBtn" name="submit" value="userInfo" class="btn btn-primary" style="display: none;">Submit</button>
       </div>
         </form>
@@ -350,11 +350,7 @@ if ($result->num_rows > 0) {
     }
 
     // Placeholder function for form validation
-    function validateForm() {
-        // Your form validation logic goes here
-        // Return true if the form is valid, false otherwise
-        return true;
-    }
+    
 </script>
 
    
